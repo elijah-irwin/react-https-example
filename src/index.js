@@ -2,11 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import registerServiceWorker from './registerServiceWorker';
+import axios from 'axios';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
+axios.defaults.headers.common['Authorization'] = 'Auth Token';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+axios.interceptors.request.use(requestConfig => {
+  console.log(requestConfig);
+
+  // Edit the req config before returning if u want (ie. add headers)
+  return requestConfig;
+}, error => {
+  console.log(error);
+  return Promise.reject(error);
+});
+
+axios.interceptors.response.use(responseConfig => {
+  console.log(responseConfig);
+
+  // Edit the res config before returning if u want (ie. add headers)
+  return responseConfig;
+}, error => {
+  console.log(error);
+  return Promise.reject(error);
+});
+
+ReactDOM.render( <App />, document.getElementById( 'root' ) );
+registerServiceWorker();
